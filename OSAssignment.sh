@@ -1,9 +1,36 @@
 #!/bin/bash
+function Main()
+{
+    echo -e "${BOLD}University Venue Management Menu\n"
 
-function AddVenue() {
+    echo "A - Register New"
+    echo "B - Search Patron Details"
+    echo "C - Add New Venue"
+    echo "D - List Vebue"
+    echo -e "E - Book Venue\n"
 
-  echo -e "\t\t\tAdd New Venue"
-  echo -e "\t\t\t================"
+    echo -e "Q = Exit from Program\n"
+
+    echo "Please select a choice: "
+    read choice
+
+    if [ $choice == "A" ]; then
+        echo "A"
+    elif [ $choice == "B" ]; then
+        echo "B"
+    elif [ $choice == "C" ]; then
+        AddNewVenue
+    elif [ $choice == "D" ]; then
+        echo "D"
+    elif [ $choice == "E" ]; then
+        echo "E"
+    fi
+}
+
+function AddNewVenue() {
+
+  echo -e "\t\t\t${BOLD}Add New Venue"
+  echo -e "\t\t================"
 
   # Get user input
   read -p "Block Name: " blockName
@@ -27,16 +54,16 @@ function AddVenue() {
   echo "Status: $status"
 
   # Ask the user if they want to add another venue
-  echo "Add Another New Venue? (y)es or (q)uit :"
+  echo "\nAdd Another New Venue? (y)es or (q)uit :"
   read option
 
   # If the user enters y, then loop back to the beginning
   if [ $option == "y" ]; then
-    AddVenue
+    AddNewVenue
   
   elif [ $option == "q" ]; then
-    echo "Press (q) to return to University Venue Management Menu."
+    echo "\nPress (q) to return to ${BOLD}University Venue Management Menu."
   fi
 }
 
-AddVenue
+Main
