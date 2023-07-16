@@ -1,4 +1,5 @@
 #!/bin/bash
+
 function Main()
 {
     echo -e "${BOLD}University Venue Management Menu\n"
@@ -6,7 +7,7 @@ function Main()
     echo "A - Register New"
     echo "B - Search Patron Details"
     echo "C - Add New Venue"
-    echo "D - List Vebue"
+    echo "D - List Venue"
     echo -e "E - Book Venue\n"
 
     echo -e "Q = Exit from Program\n"
@@ -21,14 +22,14 @@ function Main()
     elif [ $choice == "C" ]; then
         AddNewVenue
     elif [ $choice == "D" ]; then
-        echo "D"
+        ListVenue
     elif [ $choice == "E" ]; then
         echo "E"
     fi
 }
 
-function AddNewVenue() {
-
+function AddNewVenue() 
+{
   echo -e "\t\t\t${BOLD}Add New Venue"
   echo -e "\t\t================"
 
@@ -39,7 +40,6 @@ function AddNewVenue() {
   read -p "Capacity: " capacity
   read -p "Remarks: " remarks
 
-  # Set the default status to Available
   status="Available"
 
   filename="venue.txt"
@@ -53,7 +53,6 @@ function AddNewVenue() {
   echo "Remarks: $remarks"
   echo "Status: $status"
 
-  # Ask the user if they want to add another venue
   echo "\nAdd Another New Venue? (y)es or (q)uit :"
   read option
 
@@ -66,4 +65,39 @@ function AddNewVenue() {
   fi
 }
 
-Main
+function ListVenue()
+{
+  echo -e "List Venue Details\n"
+  echo "Enter Block Name: "
+  read input
+
+  filename="venue.txt"
+  venues=$(cat $filename)
+
+  printf "\n%-15s %-20s %-15s %-25s %-11s\n" "Room Number " "Room Type " "Capacity " "Remarks " "Status"
+
+  for venue in $venues; do
+    # Split the venue information into its parts
+    blockName=$(echo $venue | cut -d ":" -f 1)
+    if [ $blockName == $input ]; then
+      roomNumber=$(echo $venue | cut -d ":" -f 2)
+      roomType=$(echo $venue | cut -d ":" -f 3)
+      capacity=$(echo $venue | cut -d ":" -f 4)
+      remarks=$(echo $venue | cut -d ":" -f 5)
+
+      printf "%-15s %-20s %-15s %-30s %-11s\n" $roomNumber $roomType $capacity $remarks 
+    fi  
+  done
+
+  echo -e "Search Another Block Venue? (y)es or (q)uit:"
+  read option:
+
+  if [ $option == "y" ]; then
+    ListVenue
+
+  elif [ $option == "q" ]; then
+    Menu
+  fi
+}
+
+ListVenue

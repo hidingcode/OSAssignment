@@ -1,4 +1,4 @@
-a:a:a:a:a
-a:a:a:a:a
-a:a:a:a:a
-a:a:a:a:a
+SG:SG001:Lecture Hall:300:New venue available for booking
+K:K100:Tutorial Room:26:Under maintenance
+B:B001:Lab:26:For practical use only
+B:B002:Lab:26:For practical use only
