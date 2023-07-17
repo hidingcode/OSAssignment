@@ -255,12 +255,12 @@ function AddNewBooking(){
 
 function DisplayReceipt(){
   echo -e "\t\t\t${bold}Venue Booking Receipt"
-  echo -e "\n Patron ID:"$id"\t\t\t\t Patron Name: "$patronName
+  echo -e "\n Patron ID:"$id"\t\t\t         Patron Name: "$patronName
   echo -e "\n Room Number:"$roomNum
   echo -e "\n Date Booking:"$bookingDate
   echo -e "\n Time From:"$timeFrom"\t\t\t\t Time To: "$timeTo
   echo -e "\n Reason for Booking:"$reasonBooking
-  echo -e "\n\n This is a computer generated receipt with no signature required."
+  echo -e "\n\n\t    This is a computer generated receipt with no signature required."
 
   current_time=$(date +"%H:%M:%S%p")
   current_date=$(date +"%m-%d-%Y")
@@ -269,20 +269,5 @@ function DisplayReceipt(){
 
 }
 
-# function testing(){
-#   echo -e "\t\t\t${bold}Venue Booking Receipt"
-#   echo -e "\n Patron ID:"123456"\t\t\t\t Patron Name: "Tan Mei Ling
-#   echo -e "\n Room Number:"A001B
-#   echo -e "\n Date Booking:"12/30/2023
-#   echo -e "\n Time From:"15:00"\t\t\t\t Time To: "17:00
-#   echo -e "\n Reason for Booking: For FYP Presentation"
-#   echo -e "\n\n This is a computer generated receipt with no signature required."
-
-#   current_time=$(date +"%H:%M:%S%p")
-#   current_date=$(date +"%m-%d-%Y")
-
-#   echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
-
-# }
 
 Main
