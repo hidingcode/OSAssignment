@@ -164,7 +164,8 @@ function BookVenue()
   read option
 
   if [ $option == "n" ]; then
-  BookVenueScreen
+    BookVenueScreen
+  fi
 }
 
 function PatronDetailValidation()
@@ -203,14 +204,85 @@ function BookVenueScreen()
     filename="venue.txt"
 
     while IFS='' read -r line; do
-    roomNums="$(echo $line | cut -d ":" -f 2)"
-    if [ $roomNums == $roomNum ]; then
-        roomType=$(echo $line | cut -d ":" -f 3)
-        capacity=$(echo $line | cut -d ":" -f 4)
-        remarks=$(echo $line | cut -d ":" -f 5)
-        echo -e "$roomNums \t\t $roomType \t\t $capacity \t\t $remarks\t\t\t"
+      roomNums="$(echo $line | cut -d ":" -f 2)"
+      if [ $roomNums == $roomNum ]; then
+          roomType=$(echo $line | cut -d ":" -f 3)
+          capacity=$(echo $line | cut -d ":" -f 4)
+          remarks=$(echo $line | cut -d ":" -f 5)
+          echo -e "Room Type (auto display): $roomType"
+          echo -e "Capacity (auto display): $capacity"
+          echo -e "Remarks (auto display): $remarks"
+          echo -e "Status:"
+      fi
+    done < "$filename"
+
+    echo -e "Notes: The booking hours shall be from 8am to 8pm only. The booking duration shall be at least 30 minutes per booking."
+    echo -e "\nPlease ${bold}enter${normal} the following details:\n"
+
+    echo -e "Booking Date (mm/dd/yyyy):"
+    read bookingDate
+    echo -e "Time From (hh:mm): "
+    read timeFrom
+    echo -e "Time To (hh:mm): "
+    read timeTo
+    echo -e "Reasons for Booking: "
+    read reasonBooking
+
+    echo -e "Press ${bold}(s)${normal} to save and generate the venue booking details or Press ${bold}(c)${normal} to cancel the Venue Booking and return to University Venue Management Menu: "
+    read option
+
+    if [ $option == "s" ]; then
+      AddNewBooking
+    elif [ $option == "c" ]; then
+      Main
     fi
-  done < "$filename"
 }
+
+function AddNewBooking(){
+  filename="booking.txt"
+  checkEmpty=$(wc -l $filename)
+  num_lines="$(echo $checkEmpty | cut -d " " -f 1)"
+  if [ $num_lines -eq 0 ]; then
+    echo "PatronID:PatronName:RoomNumber:DateBooking:TimeFrom:TimeTo:ReasonsForBooking" >> $filename
+    echo $patronID":"$patronName":"$roomNum":"$bookingDate":"$timeFrom":"$timeTo":"$reasonBooking >> $filename
+  else
+    echo $id":"$patronName":"$roomNum":"$bookingDate":"$timeFrom":"$timeTo":"$reasonBooking >> $filename
+  fi
+  # echo "booking added" >> $filename
+
+  DisplayReceipt
+}
+
+function DisplayReceipt(){
+  echo -e "\t\t\t${bold}Venue Booking Receipt"
+  echo -e "\n Patron ID:"$id"\t\t\t\t Patron Name: "$patronName
+  echo -e "\n Room Number:"$roomNum
+  echo -e "\n Date Booking:"$bookingDate
+  echo -e "\n Time From:"$timeFrom"\t\t\t\t Time To: "$timeTo
+  echo -e "\n Reason for Booking:"$reasonBooking
+  echo -e "\n\n This is a computer generated receipt with no signature required."
+
+  current_time=$(date +"%H:%M:%S%p")
+  current_date=$(date +"%m-%d-%Y")
+
+  echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
+
+}
+
+# function testing(){
+#   echo -e "\t\t\t${bold}Venue Booking Receipt"
+#   echo -e "\n Patron ID:"123456"\t\t\t\t Patron Name: "Tan Mei Ling
+#   echo -e "\n Room Number:"A001B
+#   echo -e "\n Date Booking:"12/30/2023
+#   echo -e "\n Time From:"15:00"\t\t\t\t Time To: "17:00
+#   echo -e "\n Reason for Booking: For FYP Presentation"
+#   echo -e "\n\n This is a computer generated receipt with no signature required."
+
+#   current_time=$(date +"%H:%M:%S%p")
+#   current_date=$(date +"%m-%d-%Y")
+
+#   echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
+
+# }
 
 Main
