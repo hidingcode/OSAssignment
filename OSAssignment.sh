@@ -132,20 +132,18 @@ function ListVenue()
   filename="venue.txt"
   venues=$(cat $filename)
 
-  printf "\n%-15s %-20s %-15s %-25s %-11s\n" "Room Number " "Room Type " "Capacity " "Remarks " "Status"
+  echo -e ""Room Number"\t "Room Type"\t "Capacity"\t "Remarks"\t\t\t "Status""
 
-  for venue in $venues; do
-    # Split the venue information into its parts
-    blockName=$(echo $venue | cut -d ":" -f 1)
+  while IFS='' read -r line; do
+    blockName="$(echo $line | cut -d ":" -f 1)"
     if [ $blockName == $input ]; then
-      roomNumber=$(echo $venue | cut -d ":" -f 2)
-      roomType=$(echo $venue | cut -d ":" -f 3)
-      capacity=$(echo $venue | cut -d ":" -f 4)
-      remarks=$(echo $venue | cut -d ":" -f 5)
-
-      printf "%-15s %-20s %-15s %-30s %-11s\n" $roomNumber $roomType $capacity $remarks 
-    fi  
-  done
+        roomNumber="$(echo $line | cut -d ":" -f 2)"
+        roomType=$(echo $line | cut -d ":" -f 3)
+        capacity=$(echo $line | cut -d ":" -f 4)
+        remarks=$(echo $line | cut -d ":" -f 5)
+        echo -e "$roomNumber \t\t $roomType \t\t $capacity \t\t $remarks\t\t\t"
+    fi
+  done < "$filename"
 
   echo -e "Search Another Block Venue? (y)es or (q)uit:"
   read option
@@ -165,8 +163,8 @@ function BookVenue()
   echo -e "\nPress (n) to proceed Book Venue or (q) to return to ${BOLD}University Venue Management Menu:"
   read option
 
-  # if [ $option == "n" ]; then
-  # BookVenueScreen
+  if [ $option == "n" ]; then
+  BookVenueScreen
 }
 
 function PatronDetailValidation()
@@ -174,23 +172,25 @@ function PatronDetailValidation()
   echo -e "\t\t\tPatron Detail Validation"
   echo -e "\t\t\t========================"
 
-  echo -e "Pleaser enter the Patron's ID Number"
+  echo -e "Please enter the Patron's ID Number"
   read id
   
   filename="Patron.txt"
   patrons=$(cat $filename)
 
-  for patron in $patrons; do
-      # Split the patrons information into its parts
-    patronID=$(echo $patron | cut -d ":" -f 1)
+  while IFS='' read -r line; do
+    patronID="$(echo $line | cut -d ":" -f 1)"
     if [ $patronID == $id ]; then
-      patronName="$(echo $patron | cut -d ":" -f 2)"
-      # phoneNumebr=$(echo $patrons | cut -d ":" -f 3)
-      # email=$(echo $patrons | cut -d ":" -f 4)
-      echo -e "\nPatron Name (auto display): $patronName"
-      break 
-    fi   
-  done
+        patronName="$(echo $line | cut -d ":" -f 2)"
+        phoneNumber=$(echo $line | cut -d ":" -f 3)
+        email=$(echo $line | cut -d ":" -f 4)
+        echo -e "\nPatron Name (auto display): $patronName"
+        echo -e "\nPhone Number (auto display): $phoneNumber"
+        echo -e "\nEmail(auto display): $email"
+    fi
+  done < "$filename"
+ 
+  
 }
 
 function BookVenueScreen()
@@ -201,18 +201,16 @@ function BookVenueScreen()
     read roomNum
 
     filename="venue.txt"
-    for venue in $venues; do
-      # Split the venue information into its parts
-      blockName=$(echo $venue | cut -d ":" -f 1)
-      if [ $blockName == $input ]; then
-        roomNumber=$(echo $venue | cut -d ":" -f 2)
-        roomType=$(echo $venue | cut -d ":" -f 3)
-        capacity=$(echo $venue | cut -d ":" -f 4)
-        remarks=$(echo $venue | cut -d ":" -f 5)
 
-        printf "%-15s %-20s %-15s %-30s %-11s\n" $roomNumber $roomType $capacity $remarks 
-      fi  
-    done
+    while IFS='' read -r line; do
+    roomNums="$(echo $line | cut -d ":" -f 2)"
+    if [ $roomNums == $roomNum ]; then
+        roomType=$(echo $line | cut -d ":" -f 3)
+        capacity=$(echo $line | cut -d ":" -f 4)
+        remarks=$(echo $line | cut -d ":" -f 5)
+        echo -e "$roomNums \t\t $roomType \t\t $capacity \t\t $remarks\t\t\t"
+    fi
+  done < "$filename"
 }
 
-SearchPatron
+Main
