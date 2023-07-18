@@ -1,7 +1,9 @@
 #!/bin/bash
 
 function Main()
-{
+{   
+    valid =false
+
     echo -e "${BOLD}University Venue Management Menu\n"
 
     echo "A - Register New"
@@ -16,20 +18,26 @@ function Main()
     read choice
 
     if [ $choice == "A" ]; then
-        Registration
+      Registration
     elif [ $choice == "B" ]; then
-        SearchPatron
+      SearchPatron
     elif [ $choice == "C" ]; then
-        AddNewVenue
+      AddNewVenue
     elif [ $choice == "D" ]; then
-        ListVenue
+      ListVenue
     elif [ $choice == "E" ]; then
-        BookVenue
+      BookVenue
+    elif [ $choice == "Q" ]; then
+      exit 1
+    else
+      clear
+      echo -e "\nInvalid Input. Please try again\n"
+      Main
     fi
 }
 
 function Registration()
-{
+{ 
   echo -e "\t\t\t${BOLD}Patron Registration"
   echo -e "\t\t\t========================"
 
@@ -41,19 +49,33 @@ function Registration()
   filename="Patron.txt"
   echo "$id:$name:$cNumber:$email" >> $filename
 
+  ContinueRegistration
+}
+
+function ContinueRegistration()
+{
   echo -e "\nRegister Another Patron? (y) es or (q) uit :"
+  echo -e "\nPress (q) to return to ${BOLD}University Venue Management Menu."
+  
   read option
 
   if [ $option == "y" ]; then
+    clear
     Registration
   
   elif [ $option == "q" ]; then
-    echo -e "\nPress (q) to return to ${BOLD}University Venue Management Menu."
+    clear
+    Main
+  else
+    clear
+    echo -e "\nInvalid Input. Please try again\n"
+    ContinueRegistration
   fi
 }
 
 function SearchPatron()
-{
+{ 
+  valid=false
   echo "Search Patron Details"
   echo -e "\n\nEnter Patron ID: " 
   read input
@@ -61,33 +83,62 @@ function SearchPatron()
   filename="Patron.txt"
   patrons=$(cat $filename)
 
-  for patron in $patrons; do
-    id=$(echo $patron | cut -d ":" -f 1)
+  while IFS='' read -r line; do
+    id="$(echo $line | cut -d ":" -f 1)"
     if [ $id == $input ]; then
-      name=$(echo $patron | cut -d ":" -f 2)
-      cNumber=$(echo $patron | cut -d ":" -f 3)
-      email=$(echo $patron | cut -d ":" -f 4)
-    
-      echo "Full Name (auto display): $name"
-      echo "Contact Number (auto display): $cNum"
-      echo "Email Address (auto display): $email"
-      break
-    fi  
-  done
+        valid=true
+        name="$(echo $line | cut -d ":" -f 2)"
+        cNumber=$(echo $line | cut -d ":" -f 3)
+        email=$(echo $line | cut -d ":" -f 4)
+    fi
+  done < "$filename"
 
-  echo -e "\nSearch Another Patron? (y) es or (q) uit :"
+  # for patron in $patrons; do
+  #   id=$(echo $patron | cut -d ":" -f 1)
+  #   if [ $id == $input ]; then
+  #     valid=true
+  #     name=$(echo $patron | cut -d ":" -f 2)
+  #     cNumber=$(echo $patron | cut -d ":" -f 3)
+  #     email=$(echo $patron | cut -d ":" -f 4)
+  #     break
+  #   fi  
+  # done
+
+  if [ $valid == true ]; then
+    echo "Full Name (auto display): $name"
+    echo "Contact Number (auto display): $cNumber"
+    echo "Email Address (auto display): $email"
+  else
+    echo -e "\nPatron ID not found. Please try again\n"
+    SearchPatron
+  fi
+
+  ContinueSearchPatron
+
+}
+
+function ContinueSearchPatron()
+{
+    echo -e "\nSearch Another Patron? (y) es or (q) uit :"
+    echo -e "\nPress (q) to return to ${BOLD}University Venue Management Menu."
   read option
 
   if [ $option == "y" ]; then
-    Registration
+    clear
+    SearchPatron
   
   elif [ $option == "q" ]; then
-    echo -e "\nPress (q) to return to ${BOLD}University Venue Management Menu."
+    clear
+    Main
+  else
+    clear
+    echo -e "\nInvalid Input. Please try again\n"
+    ContinueSearchPatron
   fi
 }
 
 function AddNewVenue() 
-{
+{ 
   echo -e "\t\t\t${BOLD}Add New Venue"
   echo -e "\t\t================"
 
@@ -111,20 +162,33 @@ function AddNewVenue()
   echo "Remarks: $remarks"
   echo "Status: $status"
 
+  ContinueAddNewVenue
+}
+
+function ContinueAddNewVenue()
+{
   echo "\nAdd Another New Venue? (y)es or (q)uit :"
+  echo "\nPress (q) to return to ${BOLD}University Venue Management Menu."
   read option
 
   # If the user enters y, then loop back to the beginning
   if [ $option == "y" ]; then
+    clear
     AddNewVenue
   
   elif [ $option == "q" ]; then
-    echo "\nPress (q) to return to ${BOLD}University Venue Management Menu."
+    clear
+    Main
+
+  else
+    clear
+    echo "\nIncalid Input. Please try again\n"
+    ContinueAddNewVenue
   fi
 }
 
 function ListVenue()
-{
+{ 
   echo -e "List Venue Details\n"
   echo "Enter Block Name: "
   read input
@@ -145,31 +209,58 @@ function ListVenue()
     fi
   done < "$filename"
 
+  ContinueListVenue
+
+}
+
+function ContinueListVenue()
+{
   echo -e "Search Another Block Venue? (y)es or (q)uit:"
   read option
 
   if [ $option == "y" ]; then
+    clear
     ListVenue
 
   elif [ $option == "q" ]; then
+    clear
     Menu
+  
+  else
+    clear
+    echo "\nBlock Name not found. Please try again\n"
+    ContinueListVenue
   fi
 }
 
 function BookVenue()
-{
+{ 
   PatronDetailValidation
-  
+  ContinueBookVenue
+}
+
+function ContinueBookVenue()
+{
   echo -e "\nPress (n) to proceed Book Venue or (q) to return to ${BOLD}University Venue Management Menu:"
   read option
 
   if [ $option == "n" ]; then
+    clear
     BookVenueScreen
+  elif [$option == "q"]; then
+    clear
+    Main
+  else
+    clear
+    echo -e "\nInvalid Input. Please try again\n"
+    ContinueBookVenue
   fi
 }
 
 function PatronDetailValidation()
 { 
+  valid=false
+
   echo -e "\t\t\tPatron Detail Validation"
   echo -e "\t\t\t========================"
 
@@ -182,20 +273,28 @@ function PatronDetailValidation()
   while IFS='' read -r line; do
     patronID="$(echo $line | cut -d ":" -f 1)"
     if [ $patronID == $id ]; then
+        valid=true
         patronName="$(echo $line | cut -d ":" -f 2)"
         phoneNumber=$(echo $line | cut -d ":" -f 3)
         email=$(echo $line | cut -d ":" -f 4)
-        echo -e "\nPatron Name (auto display): $patronName"
-        echo -e "\nPhone Number (auto display): $phoneNumber"
-        echo -e "\nEmail(auto display): $email"
     fi
   done < "$filename"
- 
-  
+
+  if [ $valid == true ]; then
+    echo -e "\nPatron Name (auto display): $patronName"
+    echo -e "\nPhone Number (auto display): $phoneNumber"
+    echo -e "\nEmail(auto display): $email"
+  else
+    clear
+    echo -e "\nInvalid Input. Please try again\n"
+    PatronDetailValidation
+  fi
 }
 
 function BookVenueScreen()
-{
+{ 
+    valid=false
+
     echo -e "\t\t\tBooking Venue"
     echo -e "\t\t\t============="
     echo -e "\nPlease enter the Room Number : B001A: "
@@ -206,17 +305,26 @@ function BookVenueScreen()
     while IFS='' read -r line; do
       roomNums="$(echo $line | cut -d ":" -f 2)"
       if [ $roomNums == $roomNum ]; then
+          valid=true  
           roomType=$(echo $line | cut -d ":" -f 3)
           capacity=$(echo $line | cut -d ":" -f 4)
           remarks=$(echo $line | cut -d ":" -f 5)
-          echo -e "Room Type (auto display): $roomType"
-          echo -e "Capacity (auto display): $capacity"
-          echo -e "Remarks (auto display): $remarks"
-          echo -e "Status:"
+
       fi
     done < "$filename"
 
-    echo -e "Notes: The booking hours shall be from 8am to 8pm only. The booking duration shall be at least 30 minutes per booking."
+    if [ $valid == true ]; then
+      echo -e "\nRoom Type (auto display): $roomType"
+      echo -e "Capacity (auto display): $capacity"
+      echo -e "Remarks (auto display): $remarks" 
+      echo -e "Status:"
+    else
+      clear
+      echo -e "\nInvalid Input. Please try again\n"
+      BookVenueScreen
+    fi
+
+    echo -e "\nNotes: The booking hours shall be from 8am to 8pm only. The booking duration shall be at least 30 minutes per booking."
     echo -e "\nPlease ${bold}enter${normal} the following details:\n"
 
     echo -e "Booking Date (mm/dd/yyyy):"
@@ -228,14 +336,21 @@ function BookVenueScreen()
     echo -e "Reasons for Booking: "
     read reasonBooking
 
-    echo -e "Press ${bold}(s)${normal} to save and generate the venue booking details or Press ${bold}(c)${normal} to cancel the Venue Booking and return to University Venue Management Menu: "
-    read option
+    ConfirmBooking
+}
 
-    if [ $option == "s" ]; then
-      AddNewBooking
-    elif [ $option == "c" ]; then
-      Main
-    fi
+function ConfirmBooking()
+{
+  echo -e "Press ${bold}(s)${normal} to save and generate the venue booking details or Press ${bold}(c)${normal} to cancel the Venue Booking and return to University Venue Management Menu: "
+  read option
+
+  if [ $option == "s" ]; then
+    AddNewBooking
+  elif [ $option == "c" ]; then
+    Main
+  else
+    ConfirmBooking
+  fi
 }
 
 function AddNewBooking(){
@@ -268,6 +383,5 @@ function DisplayReceipt(){
   echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
 
 }
-
 
 Main
