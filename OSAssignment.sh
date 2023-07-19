@@ -315,7 +315,7 @@ function ContinueBookVenue()
 function PatronDetailValidation()
 { 
   valid=false
-
+  id=""
   echo -e "\t\t\tPatron Detail Validation"
   echo -e "\t\t\t========================"
   echo -e "Please enter the Patron's ID Number" 
@@ -394,7 +394,6 @@ function BookVenueScreen()
     fi
 
     BookingForDateTime
-    echo "Done For booking date time"
     if [[ durationValid==true ]]; then
       echo -e "Reasons for Booking: "
 
@@ -480,7 +479,6 @@ function BookingForDateTime(){
                           durationValid=false
                         else
                           if [[ $((Totime_hour - Fromtime_hour)) == 0 ]]; then
-                              echo "You must book at least 30 minutes"  
                             if [[ $((Totime_min - Fromtime_min)) < 30 ]]; then
                               echo "You must book at least 30 minutes"
                               durationValid=false
