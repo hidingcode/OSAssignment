@@ -349,7 +349,7 @@ function PatronDetailValidation()
         ContinueBookVenue
       else
         clear
-        echo -e "\nInvalid Input. Please try again\n"
+        echo -e "\nPatron ID not found. Please try again\n"
         id=""
         BookVenue
       fi
@@ -364,7 +364,7 @@ function BookVenueScreen()
 
     echo -e "\t\t\tBooking Venue"
     echo -e "\t\t\t============="
-    echo -e "\nPlease enter the Room Number : B001A: "
+    echo -e "\nPlease enter the Room Number :"
     roomNum=""
     while [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; do
       read roomNum
@@ -394,7 +394,7 @@ function BookVenueScreen()
       echo -e "Status:"
     else
       clear
-      echo -e "\nInvalid Input. Please try again\n"
+      echo -e "\nInvalid Room Number. Please try again\n"
       BookVenueScreen
     fi
 
