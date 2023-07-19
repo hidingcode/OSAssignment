@@ -2,8 +2,6 @@
 
 function Main()
 {   
-    valid =false
-
     echo -e "${BOLD}University Venue Management Menu\n"
 
     echo "A - Register New"
@@ -198,8 +196,8 @@ function AddNewVenue()
                       filename="venue.txt"
                       echo "$blockName:$roomNumber:$roomType:$capacity:$remarks" >> $filename
 
-                      # Print out result
-                      echo "Block Name: $blockName"
+                      echo "\nNew venue added"
+                      echo "\n\nBlock Name: $blockName"
                       echo "Room Number: $roomNumber"
                       echo "Room Type: $roomType"
                       echo "Capacity: $capacity"
@@ -237,13 +235,14 @@ function ContinueAddNewVenue()
 
   else
     clear
-    echo "\nIncalid Input. Please try again\n"
+    echo -e "\nInvalid Input. Please try again\n"
     ContinueAddNewVenue
   fi
 }
 
 function ListVenue()
 { 
+  valid=false
   echo -e "List Venue Details\n"
   echo "Enter Block Name: "
   read input
@@ -251,11 +250,11 @@ function ListVenue()
   filename="venue.txt"
   venues=$(cat $filename)
 
-  echo -e ""Room Number"\t "Room Type"\t "Capacity"\t "Remarks"\t\t\t "Status""
-
   while IFS='' read -r line; do
     blockName="$(echo $line | cut -d ":" -f 1)"
     if [ $blockName == $input ]; then
+        valid=true
+        echo -e ""Room Number"\t "Room Type"\t "Capacity"\t "Remarks"\t\t\t "Status""
         roomNumber="$(echo $line | cut -d ":" -f 2)"
         roomType=$(echo $line | cut -d ":" -f 3)
         capacity=$(echo $line | cut -d ":" -f 4)
@@ -263,6 +262,12 @@ function ListVenue()
         echo -e "$roomNumber \t\t $roomType \t\t $capacity \t\t $remarks\t\t\t $status"
     fi
   done < "$filename"
+
+  if [ $valid == false ]; then
+    clear
+    echo -e "\nBlock Name not found. Please try again\n"
+    ListVenue
+  fi
 
   ContinueListVenue
 

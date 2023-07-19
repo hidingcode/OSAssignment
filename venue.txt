@@ -2,3 +2,4 @@ SG:SG001:Lecture Hall:300:New venue available for booking
 K:K100:Tutorial Room:26:Under maintenance
 B:B001:Lab:26:For practical use only
 B:B002:Lab:26:For practical use only
+asdas:4534534:lAB:12:i AM THE HUNTER

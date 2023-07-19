@@ -2,3 +2,5 @@
 123456:Chin Chai Lim:016-1234567:clchin@tarc.edu.my
 230812:Tan Mei Lee:012-9999999:tanml-wp23@student.tarc.edu.my
 
+2106821:Chong Xinnan:012-3456789:chongxn-pp20@student.tarc.edu.my
+123:ykp:012-3456789:cxn@123.com
