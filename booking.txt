@@ -1,1 +1,2 @@
-
+PatronID:PatronName:RoomNumber:DateBooking:TimeFrom:TimeTo:ReasonsForBooking
+123:Chin Chai Lim:B001:02/28/2000:08:00:08:30:FYP

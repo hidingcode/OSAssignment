@@ -431,15 +431,19 @@ function BookingForDateTime(){
       day=${bookingDate:3:2}
       year=${bookingDate:6:4}
 
-      if [[ $month > 12 || $day > 31 ]]; then
+      if [[ $month > 12 || $day > 31 || $month < 01 || $day < 01 || $year < 2000 ]]; then
         clear
         echo "Please enter a valid date"
-        BookingForDate
+        BookingForDateTime
       else
         if [[ $month == 04 || $month = 06 || $month == 09 || $month == 11 && $day > 30 ]]; then
           clear
           echo "Month of "$month" do not have "$day" days."
-          BookingForDate
+          BookingForDateTime
+        elif [[ $month == 02 && $day > 28 ]]; then
+          clear
+          echo "Month of "$month" do not have "$day" days."
+          BookingForDateTime
         else
           timeFrom=""
           echo -e "Time From (hh:mm): "
@@ -483,6 +487,12 @@ function BookingForDateTime(){
                           echo "Please enter valid time"
                           durationValid=false
                         else
+                          if [ ${Fromtime_hour:0:1}==0 ]; then
+                            Fromtime_hour=${Fromtime_hour:1:1}
+                          fi
+                          if [ ${Totime_hour:0:1}==0 ]; then
+                            Totime_hour=${Totime_hour:1:1}
+                          fi
                           if [[ $((Totime_hour - Fromtime_hour)) == 0 ]]; then
                             if [[ $((Totime_min - Fromtime_min)) < 30 ]]; then
                               echo "You must book at least 30 minutes"
@@ -559,3 +569,17 @@ function DisplayReceipt(){
 
 }
 Main
+
+# function testing(){
+
+#   num1=09
+#   num2=05
+#   # Fromtime_hour=${timeFrom:0:2}
+#   num1=${num1:1:1}
+#   num2=${num2:1:1}
+
+#   echo $((num1-num2))
+
+# }
+
+# testing
