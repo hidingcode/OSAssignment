@@ -349,7 +349,7 @@ function PatronDetailValidation()
         ContinueBookVenue
       else
         clear
-        echo -e "\nInvalid Input. Please try again\n"
+        echo -e "\nPatron ID not found. Please try again\n"
         id=""
         BookVenue
       fi
@@ -430,7 +430,7 @@ function BookVenueScreen()
       echo -e "Status:"
     else
       clear
-      echo -e "\nInvalid Input. Please try again\n"
+      echo -e "\nInvalid Room Number. Please try again\n"
       BookVenueScreen
     fi
 
