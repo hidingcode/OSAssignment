@@ -364,28 +364,64 @@ function BookVenueScreen()
 
     echo -e "\t\t\tBooking Venue"
     echo -e "\t\t\t============="
-    echo -e "\nPlease enter the Room Number : B001A: "
-    roomNum=""
-    while [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; do
-      read roomNum
-      if [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; then
-        echo -e "Please enter a valid room number."
-      else
 
-        filename="venue.txt"
-        while IFS='' read -r line; do
-          roomNums="$(echo $line | cut -d ":" -f 2)"
-          if [ $roomNums == $roomNum ]; then
-              valid=true  
-              roomType=$(echo $line | cut -d ":" -f 3)
-              capacity=$(echo $line | cut -d ":" -f 4)
-              remarks=$(echo $line | cut -d ":" -f 5)
-
-          fi
-        done < "$filename"
-
+    ##############################
+    echo -e "\nPlease enter the patron capacity: "
+    while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ ]]; do
+      read patronCapacity
+      if [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ ]]; then
+        echo "Please enter valid capacity"
       fi
     done
+    ################################
+
+    exceedCapacity=true
+    while [ "$exceedCapacity" = true ]; do
+      echo -e "\nPlease enter the Room Number : B001A: "
+      filename="venue.txt"
+
+      roomNum=""
+      exceedCapacity=false
+      while [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; do
+        read roomNum
+        if [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; then
+          echo -e "Please enter a valid room number."
+        else
+          while IFS='' read -r line; do
+            roomCapacity="$(echo $line | cut -d ":" -f 4)"
+            # find the input roomnum in the file
+            # then only compare the specific room capacity
+            findRoomnum="$(echo $line | cut -d ":" -f 2)"
+            if [ $roomNum == $findRoomnum ]; then
+                if [ $patronCapacity -gt $roomCapacity ]; then
+                  # alert user
+                  exceedCapacity=true;
+                  echo -e $roomNum "is not available for" $patronCapacity "people"
+                  echo -e $roomNum "max capacity is" $roomCapacity
+                  echo -e "Please enter enough capacity room number"
+                else
+                  echo "TRUE TRUE TRUE"
+                  exceedCapacity=false
+                fi
+            fi
+
+          done < "$filename"
+        fi
+      done
+    done
+    if [ "$exceedCapacity" = false ]; then
+      filename="venue.txt"
+      while IFS='' read -r line; do
+        roomNums="$(echo $line | cut -d ":" -f 2)"
+        if [ $roomNums == $roomNum ]; then
+          valid=true  
+          roomType=$(echo $line | cut -d ":" -f 3)
+          capacity=$(echo $line | cut -d ":" -f 4)
+          remarks=$(echo $line | cut -d ":" -f 5)
+        fi
+      done < "$filename"
+    fi
+    
 
     if [ $valid == true ]; then
       echo -e "\nRoom Type (auto display): $roomType"
@@ -570,16 +606,20 @@ function DisplayReceipt(){
 }
 Main
 
-# function testing(){
-
-#   num1=09
-#   num2=05
-#   # Fromtime_hour=${timeFrom:0:2}
-#   num1=${num1:1:1}
-#   num2=${num2:1:1}
-
-#   echo $((num1-num2))
-
-# }
+function testing(){
+  roomCapacity=5
+  patronCapacity=6
+  echo -e "Enter patron capacity:"
+  while [ $patronCapacity -gt $roomCapacity ]; do
+    read patronCapacity
+    if [ $patronCapacity -gt $roomCapacity ]; then
+      echo -e "This room is not enough fit"
+      echo -e "Please try again: "
+    else
+      echo -e "Success"
+    fi
+  done
+  
+}
 
 # testing
