@@ -367,9 +367,9 @@ function BookVenueScreen()
 
     ##############################
     echo -e "\nPlease enter the patron capacity: "
-    while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ ]]; do
+    while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[1-9]+$ ]]; do
       read patronCapacity
-      if [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ ]]; then
+      if [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[1-9]+$ ]]; then
         echo "Please enter valid capacity"
       fi
     done
@@ -393,7 +393,7 @@ function BookVenueScreen()
             # then only compare the specific room capacity
             findRoomnum="$(echo $line | cut -d ":" -f 2)"
             if [ $roomNum == $findRoomnum ]; then
-                if [ $patronCapacity -gt $roomCapacity ]; then
+                if [ $patronCapacity -gt $roomCapacity]; then
                   # alert user
                   exceedCapacity=true;
                   echo -e $roomNum "is not available for" $patronCapacity "people"
