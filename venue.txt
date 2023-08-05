@@ -1,5 +1,8 @@
-SG:SG001:Lecture Hall:300:New venue available for booking
-K:K100:Tutorial Room:26:Under maintenance
-B:B001:Lab:26:For practical use only
-B:B002:Lab:26:For practical use only
-asdas:4534534:lAB:12:i AM THE HUNTER
+SG:SG001:Lecture Hall:300:New venue available for booking:Available
+K:K100:Tutorial Room:26:Under maintenance:Available
+B:B001:Lab:26:For practical use only:Available
+B:B002:Lab:26:For practical use only:Available
+asdas:4534534:lAB:12:i AM THE HUNTER:Available
+T:T001:Lab:10:Test:Available
+T:T001:Computer Lab:10:Test:Available
+X:X001:Lab:100:For pratical use only:Available

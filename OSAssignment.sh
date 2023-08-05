@@ -1,9 +1,18 @@
 #!/bin/bash
 
+# University Venue Management System
+#=====================
+# Author1:  Lim Yong Chien
+# Author2:  Yaw Kok Ping
+# Date:    14/07/2023
+# Course:  BACS2093 Operating Systems
+# Purpose: University Venue Management System
+
 function Main()
 {   
     echo -e "${BOLD}University Venue Management Menu\n"
 
+    # Display the menu options
     echo "A - Register New"
     echo "B - Search Patron Details"
     echo "C - Add New Venue"
@@ -16,50 +25,83 @@ function Main()
     read choice
 
     if [ $choice == "A" ]; then
+      # If the user selects 'A', proceed to the Registration function
       Registration
     elif [ $choice == "B" ]; then
+      # If the user selects 'B', proceed to the SearchPatron function
       SearchPatron
     elif [ $choice == "C" ]; then
+      # If the user selects 'C', proceed to the AddNewVenue function
       AddNewVenue
     elif [ $choice == "D" ]; then
+      # If the user selects 'D', proceed to the ListVenue function
       ListVenue
     elif [ $choice == "E" ]; then
+      # If the user selects 'E', proceed to the BookVenue function
       BookVenue
     elif [ $choice == "Q" ]; then
+      # If the user selects 'Q', exit the program
       exit 1
     else
+      # If the user provides an invalid input, clear the screen and prompt again
       clear
       echo -e "\nInvalid Input. Please try again\n"
       Main
     fi
 }
 
+# Patron Registration
+#=====================
+# Author1:  Lim Yong Chien
+# Task: Patron Registration
+# Description: Register the detail of patron
+# Parameters : 
+# Return     : void
+
+# Function for patron registration
 function Registration()
 { 
+  # Display the Patron Registration header
   echo -e "\t\t\t${BOLD}Patron Registration"
   echo -e "\t\t\t========================"
-  while [[ ${#id} -lt 3 || ! "$id" =~ ^[0-9]+$ ]]; do
+
+  # Loop until valid Patron ID is entered 
+  while [[ ${#id} -lt 7 || ! "$id" =~ ^[0-9]+$ ]]; do
     read -p "Patron ID (As per TARUMT format):" id 
-    if [[ ${#id} -lt 3 || ! "$id" =~ ^[0-9]+$ ]]; then
-      echo "Please enter at least 3 numeric characters."
+
+    # Check if Patron ID is valid 
+    if [[ ${#id} -lt 7 || ! "$id" =~ ^[0-9]+$ ]]; then
+      echo "Please enter at least 7 numeric characters."
     else
+      # Loop until valid Patron Full Name is entered (only letters and spaces allowed)
       while [[ -z "$name" || "$name" =~ [^a-zA-Z[:space:]] ]]; do
           read -r -p "Patron Full Name (As per NRIC) :" name
+
+          # Check if Patron Full Name is valid (only letters and spaces allowed)
           if [[ -z "$name" || "$name" =~ [^a-zA-Z[:space:]] ]]; then
             echo "Please enter valid name."
           else
+            # Loop until valid Contact Number is entered (11 digits with '-')
             while [[ ${#cNumber} -lt 11 || ! "$cNumber" =~ ^[0-9-]+$ ]]; do
                 read -p "Contact Number:" cNumber
+
+                # Check if Contact Number is valid (11 digits with '-')
                 if [[ ${#cNumber} -lt 11 || ! "$cNumber" =~ ^[0-9-]+$ ]]; then
-                  echo "Please enter valid phone number included '-', e.g 012-3456789"
+                  echo "Please enter valid phone number including '-', e.g., 012-3456789"
                 else
+                  # Loop until valid Email Address is entered 
                   while [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]]; do
                       read -p "Email Address (As per TAR UMT format):" email
+
+                      # Check if Email Address is valid 
                       if [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]]; then
                         echo "Please enter valid email address."
                       else
+                        # Save the Patron details to "Patron.txt" file
                         filename="Patron.txt"
                         echo "$id:$name:$cNumber:$email" >> $filename
+
+                        # Proceed to continue registration for another Patron
                         ContinueRegistration
                       fi
                     done
@@ -71,10 +113,9 @@ function Registration()
         done
     fi
   done
-
-  
 }
 
+# Function to ask if the user wants to continue patron registration
 function ContinueRegistration()
 {
   echo -e "\nRegister Another Patron? (y) es or (q) uit :"
@@ -96,9 +137,20 @@ function ContinueRegistration()
   fi
 }
 
+# Search Patron 
+#=====================
+# Author1:  Lim Yong Chien
+# Task: Search Patron 
+# Description: Search for the existing patron details
+# Parameters : 
+# Return     : void
+
+# Function to search for a patron's details
 function SearchPatron()
 { 
   valid=false
+
+  # Prompt user to search for Patron details by entering Patron ID
   echo "Search Patron Details"
   echo -e "\n\nEnter Patron ID: " 
   read input
@@ -106,86 +158,101 @@ function SearchPatron()
   filename="Patron.txt"
   patrons=$(cat $filename)
 
+  # Read each line of the "Patron.txt" file to find the Patron with the entered ID
   while IFS='' read -r line; do
     id="$(echo $line | cut -d ":" -f 1)"
+
+    # Check if the current Patron ID matches the entered ID
     if [ $id == $input ]; then
         valid=true
+
+        # Extract the Patron's details from the line
         name="$(echo $line | cut -d ":" -f 2)"
         cNumber=$(echo $line | cut -d ":" -f 3)
         email=$(echo $line | cut -d ":" -f 4)
     fi
   done < "$filename"
-
-  # for patron in $patrons; do
-  #   id=$(echo $patron | cut -d ":" -f 1)
-  #   if [ $id == $input ]; then
-  #     valid=true
-  #     name=$(echo $patron | cut -d ":" -f 2)
-  #     cNumber=$(echo $patron | cut -d ":" -f 3)
-  #     email=$(echo $patron | cut -d ":" -f 4)
-  #     break
-  #   fi  
-  # done
-
+  
+  # If a valid Patron is found, display their details
   if [ $valid == true ]; then
     echo "Full Name (auto display): $name"
     echo "Contact Number (auto display): $cNumber"
     echo "Email Address (auto display): $email"
   else
+    # If Patron ID is not found, prompt the user to try again
     echo -e "\nPatron ID not found. Please try again\n"
     SearchPatron
   fi
 
+  # Continue to the next step, which allows searching for another Patron or returning to the main menu
   ContinueSearchPatron
-
 }
 
+# Function to ask if the user wants to continue searching for another patron
 function ContinueSearchPatron()
 {
-    echo -e "\nSearch Another Patron? (y) es or (q) uit :"
+ # Prompt the user to choose whether to search for another patron or return to the main menu
+    echo -e "\nSearch Another Patron? (y)es or (q)uit :"
     echo -e "\nPress (q) to return to ${BOLD}University Venue Management Menu."
-  read option
+    read option
 
-  if [ $option == "y" ]; then
-    clear
-    SearchPatron
-  
-  elif [ $option == "q" ]; then
-    clear
-    Main
-  else
-    clear
-    echo -e "\nInvalid Input. Please try again\n"
-    ContinueSearchPatron
-  fi
+    # If the user chooses 'y', clear the screen and call the SearchPatron() function to search for another patron
+    if [ $option == "y" ]; then
+        clear
+        SearchPatron
+
+    # If the user chooses 'q', clear the screen and return to the main menu by calling the Main() function
+    elif [ $option == "q" ]; then
+        clear
+        Main
+
+    # If the user enters an invalid option, clear the screen, display an error message, and ask again
+    else
+        clear
+        echo -e "\nInvalid Input. Please try again\n"
+        ContinueSearchPatron
+    fi
 }
 
+# Add New Veune
+#=====================
+# Author2:  Yaw Kok Ping
+# Task: Add New Venue 
+# Description: Add venue details such as name etc
+# Parameters : 
+# Return     : void
+
+# Function to add a new venue
 function AddNewVenue() 
 { 
   echo -e "\t\t\t${BOLD}Add New Venue"
   echo -e "\t\t================"
 
-  # Get user input
+  # Get user input for Block Name and validate it
   while [[ -z "$blockName" || ! "$blockName" =~ ^[a-zA-Z]+$ ]]; do
     read -p "Block Name: " blockName
     if [[ ! "$blockName" =~ ^[a-zA-Z]+$ ]]; then
       echo "Please enter a valid block"
     else
+      # Get user input for Room Number and validate it
       while [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[a-zA-Z0-9]+$ ]]; do
         read -p "Room Number: " roomNumber
         if [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[a-zA-Z0-9]+$ ]]; then
           echo "Please enter a valid room number"
         else
-          while [[ -z "$roomType" || ! "$roomType" =~ ^[a-zA-Z]+$ ]]; do
+          # Get user input for Room Type and validate it
+          while [[ -z "$roomType" || ! "$roomType" =~ [^a-zA-Z[:space:]] ]]; do
             read -p "Room Type: " roomType
-            if [[ -z "$roomType" || ! "$roomType" =~ ^[a-zA-Z]+$ ]]; then
+            if [[ -z "$roomType" || ! "$roomType" =~ ^[a-zA-Z[:space:]] ]]; then
               echo "Please enter a valid room type"
             else
+              # Get user input for Capacity and validate it
               while [[ -z "$capacity" || ! "$capacity" =~ ^[0-9]+$ ]]; do
                 read -p "Capacity: " capacity
                 if [[ -z "$capacity" || ! "$capacity" =~ ^[0-9]+$ ]]; then
                   echo "Please enter the capacity"
                 else
+                  # Get user input for Remarks and validate it
                   while [[ -z "$remarks" || ! "$remarks" =~ [^0-9[:space:]] ]]; do
                     read -p "Remarks: " remarks
                     if [[ -z "$remarks" || ! "$remarks" =~ [^0-9[:space:]] ]]; then
@@ -194,10 +261,10 @@ function AddNewVenue()
                       status="Available"
 
                       filename="venue.txt"
-                      echo "$blockName:$roomNumber:$roomType:$capacity:$remarks" >> $filename
+                      echo "$blockName:$roomNumber:$roomType:$capacity:$remarks:$status" >> $filename
 
-                      echo "\nNew venue added"
-                      echo "\n\nBlock Name: $blockName"
+                      echo -e "\n\nNew venue added"
+                      echo -e "\n\nBlock Name: $blockName"
                       echo "Room Number: $roomNumber"
                       echo "Room Type: $roomType"
                       echo "Capacity: $capacity"
@@ -215,24 +282,27 @@ function AddNewVenue()
       done
     fi
   done
-  
 }
 
+# Function to ask if the user wants to continue adding another venue
 function ContinueAddNewVenue()
 {
   echo "Add Another New Venue? (y)es or (q)uit :"
   echo "Press (q) to return to ${BOLD}University Venue Management Menu."
   read option
 
-  # If the user enters y, then loop back to the beginning
+  # If the user enters 'y', then loop back to the beginning and add a new venue
   if [ $option == "y" ]; then
     clear
     AddNewVenue
   
+  # If the user enters 'q', then clear the screen and return to the main menu
   elif [ $option == "q" ]; then
     clear
     Main
 
+  # If the user enters any other input, clear the screen, display an error message,
+  # and prompt the user to try again by calling ContinueAddNewVenue() recursively.
   else
     clear
     echo -e "\nInvalid Input. Please try again\n"
@@ -240,6 +310,15 @@ function ContinueAddNewVenue()
   fi
 }
 
+# List Venue
+#=====================
+# Author2:  Yaw Kok Ping
+# Task: List Venue 
+# Description: List the venue details
+# Parameters : 
+# Return     : void
+
+# Function to list venue details
 function ListVenue()
 { 
   valid=false
@@ -254,11 +333,16 @@ function ListVenue()
     blockName="$(echo $line | cut -d ":" -f 1)"
     if [ $blockName == $input ]; then
         valid=true
+
+        # Print the column headers
         echo -e ""Room Number"\t "Room Type"\t "Capacity"\t "Remarks"\t\t\t "Status""
+
+        # Extract and display venue details
         roomNumber="$(echo $line | cut -d ":" -f 2)"
         roomType=$(echo $line | cut -d ":" -f 3)
         capacity=$(echo $line | cut -d ":" -f 4)
         remarks=$(echo $line | cut -d ":" -f 5)
+        status=$(echo $line | cut -d ":" -f 6)
         echo -e "$roomNumber \t\t $roomType \t\t $capacity \t\t $remarks\t\t\t $status"
     fi
   done < "$filename"
@@ -273,94 +357,126 @@ function ListVenue()
 
 }
 
+# Function to ask if the user wants to continue searching for another block
 function ContinueListVenue()
 {
-  echo -e "Search Another Block Venue? (y)es or (q)uit:"
-  read option
+  # Prompting the user for input
+  echo -e "Search Another Block Venue? (y)es or (q)uit:"  
+  read option  
 
-  if [ $option == "y" ]; then
-    clear
-    ListVenue
+  # If the user chooses to search for another block (input is 'y')
+  if [ $option == "y" ]; then  
+    clear 
+    # Call the function ListVenue() to search for another venue block 
+    ListVenue  
 
-  elif [ $option == "q" ]; then
-    clear
-    Menu
-  
-  else
-    clear
-    echo "\nBlock Name not found. Please try again\n"
-    ContinueListVenue
+  # If the user chooses to quit (input is 'q')
+  elif [ $option == "q" ]; then  
+    clear 
+    # Call the main menu function 'Menu' to return to the main menu 
+    Menu  
+
+  else  
+    clear  
+    # Display an error message for invalid input
+    echo -e "\nInvalid Input. Please try again\n" 
+    # Ask the user to try again by calling this function recursively 
+    ContinueListVenue  
   fi
 }
 
+# Validate User Information
+#=====================
+# Author1:  Lim Yong Chien
+# Task: Validate User Information
+# Description: Validate User Information and Check for Room avaliability
+# Parameters : 
+# Return     : void
+
+# Function to book a venue
 function BookVenue()
 { 
   PatronDetailValidation
   # ContinueBookVenue
 }
 
+# Function to ask if the user wants to proceed with booking a venue or return to the main menu
 function ContinueBookVenue()
 {
-  echo -e "\nPress (n) to proceed Book Venue or (q) to return to ${BOLD}University Venue Management Menu:"
-  read option
+  echo -e "\nPress (n) to proceed Book Venue or (q) to return to ${BOLD}University Venue Management Menu:"  # Prompting the user for input
+  read option  # Reading user's choice
 
-  if [ $option == "n" ]; then
-    clear
-    BookVenueScreen
-  elif [$option == "q"]; then
-    clear
-    Main
-  else
-    clear
-    echo -e "\nInvalid Input. Please try again\n"
-    ContinueBookVenue
+  if [ $option == "n" ]; then  # If the user chooses to proceed with booking (input is 'n')
+    clear 
+    BookVenueScreen  # Call the function BookVenueScreen() to proceed with booking a venue
+
+  elif [ $option == "q" ]; then  # If the user chooses to return to the main menu (input is 'q')
+    clear 
+    Main  # Call the main menu function 'Main' to return to the main menu
+
+  else  # If the user provides any other input
+    clear 
+    echo -e "\nInvalid Input. Please try again\n"  # Display an error message for invalid input
+    ContinueBookVenue  # Ask the user to try again by calling this function recursively
   fi
 }
 
+# Function to validate the patron's details before booking
 function PatronDetailValidation()
 { 
-  valid=false
-  id=""
+  valid=false  # Initialize the 'valid' flag to false, assuming the patron's ID is not valid initially
+  id=""  # Initialize 'id' variable to an empty string
   echo -e "\t\t\tPatron Detail Validation"
   echo -e "\t\t\t========================"
-  echo -e "Please enter the Patron's ID Number" 
-  while [[ ${#id} -lt 3 || ! "$id" =~ ^[0-9]+$ ]]; do
-    read id
-    if [[ ${#id} -lt 3 || ! "$id" =~ ^[0-9]+$ ]]; then
-      echo -e "Please enter valid Patron's ID Number"
-    else
-      filename="Patron.txt"
-      patrons=$(cat $filename)
+  echo -e "Please enter the Patron's ID Number"  # Prompt the user to enter the patron's ID Number
 
+  # Loop until a valid ID is entered (at least 3 digits and only numeric characters)
+  while [[ ${#id} -lt 3 || ! "$id" =~ ^[0-9]+$ ]]; do
+    read id  # Read user input for the patron's ID
+    if [[ ${#id} -lt 3 || ! "$id" =~ ^[0-9]+$ ]]; then  # If the entered ID is invalid
+      echo -e "Please enter valid Patron's ID Number"  # Display an error message for invalid input
+    else
+      filename="Patron.txt"  # Filename of the text file containing patron details
+      patrons=$(cat $filename)  # Read all patron details from the file
+
+      # Loop through each line of the file to find the patron with the given ID
       while IFS='' read -r line; do
-        patronID="$(echo $line | cut -d ":" -f 1)"
-        if [ $patronID == $id ]; then
-            valid=true
-            patronName="$(echo $line | cut -d ":" -f 2)"
-            phoneNumber=$(echo $line | cut -d ":" -f 3)
-            email=$(echo $line | cut -d ":" -f 4)
+        patronID="$(echo $line | cut -d ":" -f 1)"  # Extract the patron ID from the line
+        if [ $patronID == $id ]; then  # If the patron ID matches the entered ID
+            valid=true  # Set 'valid' flag to true, indicating the patron ID is valid
+            patronName="$(echo $line | cut -d ":" -f 2)"  # Extract the patron name from the line
+            phoneNumber=$(echo $line | cut -d ":" -f 3)  # Extract the phone number from the line
+            email=$(echo $line | cut -d ":" -f 4)  # Extract the email from the line
         fi
       done < "$filename"
 
-      if [ $valid == true ]; then
-        echo -e "\nPatron Name (auto display): $patronName"
-        echo -e "\nPhone Number (auto display): $phoneNumber"
-        echo -e "\nEmail(auto display): $email"
-        ContinueBookVenue
-      else
-        clear
-        echo -e "\nPatron ID not found. Please try again\n"
-        id=""
-        BookVenue
+      if [ $valid == true ]; then  # If the patron ID is valid
+        echo -e "\nPatron Name (auto display): $patronName"  # Display the patron's name
+        echo -e "\nPhone Number (auto display): $phoneNumber"  # Display the patron's phone number
+        echo -e "\nEmail (auto display): $email"  # Display the patron's email
+        ContinueBookVenue  # Call the function to proceed with venue booking
+      else  # If the patron ID is not found in the file
+        clear  # Clear the screen
+        echo -e "\nPatron ID not found. Please try again\n"  # Display an error message
+        id=""  # Reset the 'id' variable to an empty string for re-entering the patron ID
+        BookVenue  # Call the function to book a venue again
       fi
     fi
-  done
-  
+  done 
 }
+
+# Book Venue
+#=====================
+# Author2:  Yaw Kok Ping
+# Task: Book Venue
+# Description: Allow the user to book for venue and choose the time
+# Parameters : 
+# Return     : void
+
 
 function BookVenueScreen()
 { 
-    valid=false
+    valid=false  # Initialize the 'valid' flag to false, assuming the room number is not valid initially
 
     echo -e "\t\t\tBooking Venue"
     echo -e "\t\t\t============="
@@ -368,9 +484,9 @@ function BookVenueScreen()
     ##############################
     echo -e "\nPlease enter the patron capacity: "
     while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[1-9]+$ ]]; do
-      read patronCapacity
+      read patronCapacity  # Read user input for the patron's capacity
       if [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[1-9]+$ ]]; then
-        echo "Please enter valid capacity"
+        echo "Please enter valid capacity"  # Display an error message for invalid input
       fi
     done
     ################################
@@ -383,124 +499,136 @@ function BookVenueScreen()
       roomNum=""
       exceedCapacity=false
       while [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; do
-        read roomNum
+        read roomNum  # Read user input for the room number
         if [[ ${#roomNum} -lt 4 || ! "$roomNum" =~ ^[a-zA-Z0-9]+$ ]]; then
-          echo -e "Please enter a valid room number."
+          echo -e "Please enter a valid room number."  # Display an error message for invalid input
         else
           while IFS='' read -r line; do
-            roomCapacity="$(echo $line | cut -d ":" -f 4)"
-            # find the input roomnum in the file
-            # then only compare the specific room capacity
-            findRoomnum="$(echo $line | cut -d ":" -f 2)"
-            if [ $roomNum == $findRoomnum ]; then
-                if [ $patronCapacity -gt $roomCapacity]; then
-                  # alert user
+            roomCapacity="$(echo $line | cut -d ":" -f 4)"  # Extract the room capacity from the line
+            status="$(echo $line | cut -d ":" -f 6)"  # Extract the status from the line
+            findRoomnum="$(echo $line | cut -d ":" -f 2)"  # Extract the room number from the line
+            if [ $roomNum == $findRoomnum ]; then  # If the entered room number is found in the file
+                if [ $patronCapacity -gt $roomCapacity ]; then
+                  # If the patron capacity exceeds the room capacity, set the 'exceedCapacity' flag to true
                   exceedCapacity=true;
                   echo -e $roomNum "is not available for" $patronCapacity "people"
                   echo -e $roomNum "max capacity is" $roomCapacity
                   echo -e "Please enter enough capacity room number"
                 else
-                  echo "TRUE TRUE TRUE"
+                  # If the patron capacity is within the room capacity, set the 'exceedCapacity' flag to false
                   exceedCapacity=false
                 fi
             fi
-
           done < "$filename"
         fi
       done
     done
-    if [ "$exceedCapacity" = false ]; then
+
+    if [ "$exceedCapacity" = false ]; then  # If the room number and capacity are valid
       filename="venue.txt"
       while IFS='' read -r line; do
         roomNums="$(echo $line | cut -d ":" -f 2)"
         if [ $roomNums == $roomNum ]; then
-          valid=true  
-          roomType=$(echo $line | cut -d ":" -f 3)
-          capacity=$(echo $line | cut -d ":" -f 4)
-          remarks=$(echo $line | cut -d ":" -f 5)
+          valid=true  # Set 'valid' flag to true, indicating the room number is valid
+          roomType=$(echo $line | cut -d ":" -f 3)  # Extract the room type from the line
+          capacity=$(echo $line | cut -d ":" -f 4)  # Extract the capacity from the line
+          remarks=$(echo $line | cut -d ":" -f 5)  # Extract the remarks from the line
+          status="$(echo $line | cut -d ":" -f 6)"  # Extract the status from the line
         fi
       done < "$filename"
     fi
-    
 
-    if [ $valid == true ]; then
-      echo -e "\nRoom Type (auto display): $roomType"
-      echo -e "Capacity (auto display): $capacity"
-      echo -e "Remarks (auto display): $remarks" 
-      echo -e "Status:"
+    if [ $valid == true ]; then  # If the room number is valid
+      echo -e "\nRoom Type (auto display): $roomType"  # Display the room type
+      echo -e "Capacity (auto display): $capacity"  # Display the room capacity
+      echo -e "Remarks (auto display): $remarks"  # Display the room remarks
+      echo -e "Status: $status"  # Display the room status
     else
       clear
       echo -e "\nInvalid Room Number. Please try again\n"
-      BookVenueScreen
+      BookVenueScreen  # Call the function again to book a venue with valid room number
     fi
 
-    BookingForDateTime
-    if [[ durationValid==true ]]; then
+    BookingForDateTime  # Call the function to book a date and time for the venue
+
+    if [[ durationValid == true ]]; then  # If the booking duration is valid
       echo -e "Reasons for Booking: "
 
       while [[ -z "$reasonBooking" || ! "$reasonBooking" =~ ^[a-zA-Z[:space:]]*$ ]]; do
-        read reasonBooking
+        read reasonBooking  # Read user input for the reason for booking
         if [[ -z "$reasonBooking" || ! "$reasonBooking" =~ ^[a-zA-Z[:space:]]*$ ]]; then
-          echo "Please enter proper reason for booking"
+          echo "Please enter proper reason for booking"  # Display an error message for invalid input
         else
-          ConfirmBooking
+          ConfirmBooking  # Call the function to confirm the booking
         fi
       done
     fi
 }
 
+# Function to prompt the user to enter booking date, start time, and end time
 function BookingForDateTime(){
+  # Display important notes regarding booking hours and duration
   echo -e "\nNotes: The booking hours shall be from 8am to 8pm only. The booking duration shall be at least 30 minutes per booking."
   echo -e "\nPlease ${bold}enter${normal} the following details:\n"
 
+  # Prompt the user to enter the booking date in the format mm/dd/yyyy
   echo -e "Booking Date (mm/dd/yyyy):"
   bookingDate=""
   while [[ -z "$bookingDate" || ! "$bookingDate" =~ ^[0-9]{2}/[0-9]{2}/[0-9]{4}$ ]]; do
     read bookingDate
 
     if [[ -z "$bookingDate" || ! "$bookingDate" =~ ^[0-9]{2}/[0-9]{2}/[0-9]{4}$ ]]; then
+      # If the date format is incorrect, clear the screen and prompt again
       clear
       echo "Please enter a valid booking date."
       BookingForDateTime
     else
+      # Extract the month, day, and year from the booking date
       month=${bookingDate:0:2}
       day=${bookingDate:3:2}
       year=${bookingDate:6:4}
 
+      # Perform date validations
       if [[ $month > 12 || $day > 31 || $month < 01 || $day < 01 || $year < 2000 ]]; then
         clear
         echo "Please enter a valid date"
         BookingForDateTime
       else
+        # Check if the day is valid for certain months
         if [[ $month == 04 || $month = 06 || $month == 09 || $month == 11 && $day > 30 ]]; then
           clear
-          echo "Month of "$month" do not have "$day" days."
+          echo "Month of "$month" does not have "$day" days."
           BookingForDateTime
         elif [[ $month == 02 && $day > 28 ]]; then
           clear
-          echo "Month of "$month" do not have "$day" days."
+          echo "Month of "$month" does not have "$day" days."
           BookingForDateTime
         else
           timeFrom=""
+          # Prompt the user to enter the start time in the format hh:mm
           echo -e "Time From (hh:mm): "
           while [[ -z "$timeFrom" || ! "$timeFrom" =~ ^[0-9]{2}:[0-9]{2}$ ]]; do
             read timeFrom
             if [[ -z "$timeFrom" || ! "$timeFrom" =~ ^[0-9]{2}:[0-9]{2}$ ]]; then
+              # If the time format is incorrect, ask the user to enter a valid time
               echo "Please enter valid time"
             else
+              # Extract the hour and minute from the start time
               Fromtime_hour=${timeFrom:0:2}
               Fromtime_min=${timeFrom:3:2}
               if [[ $Fromtime_hour > 23 || $Fromtime_min > 59 ]]; then
+                # Perform time validations
                 clear
                 echo "Please enter valid time"
                 BookingForDateTime
               else
                 if [[ (08 > $Fromtime_hour) ]]; then
+                  # Check if the start time is within the booking hours (8am to 8pm)
                   clear
-                  echo $Fromtime_hour
                   echo "The booking hours shall be from 8am to 8pm only"
                   BookingForDateTime
                 elif [[ ($Fromtime_hour > 20) ]]; then
+                  # Check if the start time is within the booking hours (8am to 8pm)
                   clear
                   echo "The booking hours shall be from 8am to 8pm only"
                   BookingForDateTime
@@ -509,29 +637,35 @@ function BookingForDateTime(){
                   while [[ $durationValid == false ]]; do
                     durationValid=true
                     timeTo=""
+                    # Prompt the user to enter the end time in the format hh:mm
                     echo -e "Time To (hh:mm): "
                     while [[ -z "$timeTo" || ! "$timeTo" =~ ^[0-9]{2}:[0-9]{2}$ ]]; do
                       read timeTo
                       if [[ -z "$timeTo" || ! "$timeTo" =~ ^[0-9]{2}:[0-9]{2}$ ]]; then
+                        # If the time format is incorrect, ask the user to enter a valid time
                         echo "Please enter valid time"
                       else
+                        # Extract the hour and minute from the end time
                         Totime_hour=${timeTo:0:2}
                         Totime_min=${timeTo:3:2}
 
                         if [[ $Totime_hour > 23 || $Totime_min > 59 ]]; then
+                          # Perform time validations
                           clear
                           echo "Please enter valid time"
                           durationValid=false
                         else
-                          if [ ${Fromtime_hour:0:1}==0 ]; then
+                          # Remove leading zeros from the hour if present
+                          if [ ${Fromtime_hour:0:1} == 0 ]; then
                             Fromtime_hour=${Fromtime_hour:1:1}
                           fi
-                          if [ ${Totime_hour:0:1}==0 ]; then
+                          if [ ${Totime_hour:0:1} == 0 ]; then
                             Totime_hour=${Totime_hour:1:1}
                           fi
                           if [[ $((Totime_hour - Fromtime_hour)) == 0 ]]; then
                             if [[ $((Totime_min - Fromtime_min)) < 30 ]]; then
-                              echo "You must book at least 30 minutes"
+                              # Check if the booking duration is at least 30 minutes
+                              echo "You must book for at least 30 minutes"
                               durationValid=false
                             else
                               durationValid=true
@@ -558,68 +692,111 @@ function BookingForDateTime(){
     fi
 
   done
-}
+} 
 
+
+# Booking Confirmation
+#=====================
+# Author1:  Lim Yong Chien
+# Task: Booking Confirmation
+# Description: Allow the user to confirm their booking 
+# Parameters : 
+# Return     : void
+
+# Function to ask the user to confirm the booking or cancel
 function ConfirmBooking()
 {
   echo -e "Press ${bold}(s)${normal} to save and generate the venue booking details or Press ${bold}(c)${normal} to cancel the Venue Booking and return to University Venue Management Menu: "
-  read option
+  read option  # Read user input for the confirmation option
 
   if [ $option == "s" ]; then
-    AddNewBooking
+    AddNewBooking  # If the user selects 's', proceed with the venue booking (call AddNewBooking function)
   elif [ $option == "c" ]; then
-    Main
+    Main  # If the user selects 'c', cancel the venue booking and return to the University Venue Management Menu (call Main function)
   else
-    ConfirmBooking
+    ConfirmBooking  # If the user inputs an invalid option, prompt again for a valid option by calling the ConfirmBooking function
   fi
 }
 
+# Add Booking
+#=====================
+# Author1:  Lim Yong Chien
+# Task: Add Booking
+# Description: Save the user booking 
+# Parameters : 
+# Return     : void
+
+# Function to add the new booking to the booking.txt file
 function AddNewBooking(){
   filename="booking.txt"
+
+  # Check if the booking.txt file is empty
   checkEmpty=$(wc -l $filename)
   num_lines="$(echo $checkEmpty | cut -d " " -f 1)"
+
+  # If the file is empty, add the header and the new booking details
   if [ $num_lines -eq 0 ]; then
     echo "PatronID:PatronName:RoomNumber:DateBooking:TimeFrom:TimeTo:ReasonsForBooking" >> $filename
     echo $patronID":"$patronName":"$roomNum":"$bookingDate":"$timeFrom":"$timeTo":"$reasonBooking >> $filename
   else
+    # If the file already has entries, append the new booking details
     echo $id":"$patronName":"$roomNum":"$bookingDate":"$timeFrom":"$timeTo":"$reasonBooking >> $filename
   fi
-  # echo "booking added" >> $filename
 
+  # Add a message to the booking.txt file to indicate the booking was added
+  echo "booking added" >> $filename
+
+  # Display the booking receipt
   DisplayReceipt
 }
 
+# Display Receipt
+#=====================
+# Author1:  Lim Yong Chien
+# Task: Display Receipt
+# Description: Display the receipt after user confirm their booking
+# Parameters : 
+# Return     : void
+
+# Function to display the booking receipt
 function DisplayReceipt(){
+  # Display the header for the booking receipt
   echo -e "\t\t\t${bold}Venue Booking Receipt"
+
+  # Display the booking details, such as Patron ID, Patron Name, Room Number, Date Booking, Time From, Time To, and Reason for Booking
   echo -e "\n Patron ID:"$id"\t\t\t         Patron Name: "$patronName
   echo -e "\n Room Number:"$roomNum
   echo -e "\n Date Booking:"$bookingDate
   echo -e "\n Time From:"$timeFrom"\t\t\t\t Time To: "$timeTo
   echo -e "\n Reason for Booking:"$reasonBooking
-  echo -e "\n\n\t    This is a computer generated receipt with no signature required."
 
+  # Display a message indicating that the receipt doesn't require a signature
+  echo -e "\n\n\t    This is a computer-generated receipt with no signature required."
+
+  # Get the current time and date and display it on the receipt
   current_time=$(date +"%H:%M:%S%p")
   current_date=$(date +"%m-%d-%Y")
-
   echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
-
 }
+
+
+# Call the main function to start the program
 Main
 
-function testing(){
-  roomCapacity=5
-  patronCapacity=6
-  echo -e "Enter patron capacity:"
-  while [ $patronCapacity -gt $roomCapacity ]; do
-    read patronCapacity
-    if [ $patronCapacity -gt $roomCapacity ]; then
-      echo -e "This room is not enough fit"
-      echo -e "Please try again: "
-    else
-      echo -e "Success"
-    fi
-  done
+# function testing(){
+#   roomCapacity=5
+#   patronCapacity=6
+#   echo -e "Enter patron capacity:"
+#   while [ $patronCapacity -gt $roomCapacity ]; do
+#     read patronCapacity
+#     if [ $patronCapacity -gt $roomCapacity ]; then
+#       echo -e "This room is not enough fit"
+#       echo -e "Please try again: "
+#     else
+#       echo -e "Success"
+#     fi
+#   done
   
-}
+# }
 
 # testing
