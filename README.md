@@ -1,17 +1,14 @@
 # OS Assignment
 
 ### Run the file with 
-```
-sh
-console bash OSAssignment.sh
+```sh
+bash OSAssignment.sh
 ```
 
 ### If you cannot run the file please follow the step below
+```sh
+apt install dos2unix
 ```
-sh
-sudo apt install dos2unix
-```
-```
-sh
+```sh
 dos2unix OSAssignment.sh
 ``` 
