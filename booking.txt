@@ -1,3 +1,7 @@
 PatronID:PatronName:RoomNumber:DateBooking:TimeFrom:TimeTo:ReasonsForBooking
 123:Chin Chai Lim:B001:02/28/2000:08:00:08:30:FYP
 123:ykp:SG001:01/01/2000:13:00:13:30:FYP
+123456:Chin Chai Lim:B002:09/11/2023:10:00:11:00:FYP presentation
+booking added
+123456:Chin Chai Lim:B002:09/11/2023:10:00:10:30:FYP meeting
+booking added

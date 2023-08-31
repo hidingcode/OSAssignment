@@ -483,9 +483,9 @@ function BookVenueScreen()
 
     ##############################
     echo -e "\nPlease enter the patron capacity: "
-    while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[1-9]+$ ]]; do
+    while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ || "$patronCapacity" -le 0 ]]; do
       read patronCapacity  # Read user input for the patron's capacity
-      if [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[1-9]+$ ]]; then
+      if [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ || "$patronCapacity" -le 0 ]]; then
         echo "Please enter valid capacity"  # Display an error message for invalid input
       fi
     done
@@ -551,7 +551,7 @@ function BookVenueScreen()
 
     BookingForDateTime  # Call the function to book a date and time for the venue
 
-    if [[ durationValid == true ]]; then  # If the booking duration is valid
+    if [[ $durationValid == true ]]; then  # If the booking duration is valid
       echo -e "Reasons for Booking: "
 
       while [[ -z "$reasonBooking" || ! "$reasonBooking" =~ ^[a-zA-Z[:space:]]*$ ]]; do
@@ -595,7 +595,7 @@ function BookingForDateTime(){
         BookingForDateTime
       else
         # Check if the day is valid for certain months
-        if [[ $month == 04 || $month = 06 || $month == 09 || $month == 11 && $day > 30 ]]; then
+        if [[ ($month == 04 || $month = 06 || $month == 09 || $month == 11) && $day > 30 ]]; then
           clear
           echo "Month of "$month" does not have "$day" days."
           BookingForDateTime
@@ -665,7 +665,7 @@ function BookingForDateTime(){
                           if [[ $((Totime_hour - Fromtime_hour)) == 0 ]]; then
                             if [[ $((Totime_min - Fromtime_min)) < 30 ]]; then
                               # Check if the booking duration is at least 30 minutes
-                              echo "You must book for at least 30 minutes"
+                              echo "Booking duration must be at least 30 minutes!"
                               durationValid=false
                             else
                               durationValid=true
