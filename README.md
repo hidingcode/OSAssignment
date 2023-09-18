@@ -2,7 +2,7 @@
 
 ### Run the file with 
 ```sh
-bash OSAssignment.sh
+bash OSAssignment
 ```
 
 ### If you cannot run the file please follow the step below
