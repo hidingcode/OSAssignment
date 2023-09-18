@@ -90,11 +90,11 @@ function Registration()
                   echo "Please enter valid phone number including '-', e.g., 012-3456789"
                 else
                   # Loop until valid Email Address is entered 
-                  while [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]]; do
+                  while [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9.%+-]+@student.tarc.edu.my$ ]]; do
                       read -p "Email Address (As per TAR UMT format):" email
 
                       # Check if Email Address is valid 
-                      if [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]]; then
+                      if [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9.%+-]+@student.tarc.edu.my$ ]]; then
                         echo "Please enter valid email address."
                       else
                         # Save the Patron details to "Patron.txt" file
