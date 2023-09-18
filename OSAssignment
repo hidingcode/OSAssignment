@@ -235,9 +235,9 @@ function AddNewVenue()
       echo "Please enter a valid block"
     else
       # Get user input for Room Number and validate it
-      while [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[a-zA-Z0-9]+$ ]]; do
+      while [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[0-9]+$ ]]; do
         read -p "Room Number: " roomNumber
-        if [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[a-zA-Z0-9]+$ ]]; then
+        if [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[0-9]+$ ]]; then
           echo "Please enter a valid room number"
         else
           # Get user input for Room Type and validate it
@@ -261,6 +261,7 @@ function AddNewVenue()
                       status="Available"
 
                       filename="venue.txt"
+                      roomNumber=$blockName+$roomNumber
                       echo "$blockName:$roomNumber:$roomType:$capacity:$remarks:$status" >> $filename
 
                       echo -e "\n\nNew venue added"
