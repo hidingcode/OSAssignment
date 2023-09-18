@@ -328,15 +328,17 @@ function ListVenue()
 
   filename="venue.txt"
   venues=$(cat $filename)
-
+  columnDisplay=false
   while IFS='' read -r line; do
     blockName="$(echo $line | cut -d ":" -f 1)"
     if [ $blockName == $input ]; then
         valid=true
-
-        # Print the column headers
-        echo -e ""Room Number"\t "Room Type"\t "Capacity"\t "Remarks"\t\t\t "Status""
-
+        if [ $columnDisplay == false ]; then
+          # Print the column headers
+          columnDisplay=true
+          echo -e ""Room Number"\t "Room Type"\t "Capacity"\t "Remarks"\t\t\t "Status""
+        fi
+        
         # Extract and display venue details
         roomNumber="$(echo $line | cut -d ":" -f 2)"
         roomType=$(echo $line | cut -d ":" -f 3)
@@ -344,6 +346,8 @@ function ListVenue()
         remarks=$(echo $line | cut -d ":" -f 5)
         status=$(echo $line | cut -d ":" -f 6)
         echo -e "$roomNumber \t\t $roomType \t\t $capacity \t\t $remarks\t\t\t $status"
+      
+      
     fi
   done < "$filename"
 
