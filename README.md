@@ -10,5 +10,5 @@ bash OSAssignment.sh
 apt install dos2unix
 ```
 ```sh
-dos2unix OSAssignment.sh
+dos2unix OSAssignment
 ``` 
