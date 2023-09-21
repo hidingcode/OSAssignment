@@ -163,7 +163,7 @@ function SearchPatron()
     id="$(echo $line | cut -d ":" -f 1)"
 
     # Check if the current Patron ID matches the entered ID
-    if [ $id == $input ]; then
+    if [[ $id == $input ]]; then
         valid=true
 
         # Extract the Patron's details from the line
@@ -331,7 +331,7 @@ function ListVenue()
   columnDisplay=false
   while IFS='' read -r line; do
     blockName="$(echo $line | cut -d ":" -f 1)"
-    if [ $blockName == $input ]; then
+    if [[ $blockName == $input ]]; then
         valid=true
         if [ $columnDisplay == false ]; then
           # Print the column headers
@@ -369,13 +369,13 @@ function ContinueListVenue()
   read option  
 
   # If the user chooses to search for another block (input is 'y')
-  if [ $option == "y" ]; then  
+  if [[ $option == "y" ]]; then  
     clear 
     # Call the function ListVenue() to search for another venue block 
     ListVenue  
 
   # If the user chooses to quit (input is 'q')
-  elif [ $option == "q" ]; then  
+  elif [[ $option == "q" ]]; then  
     clear 
     # Call the main menu function 'Menu' to return to the main menu 
     Menu  
@@ -410,11 +410,11 @@ function ContinueBookVenue()
   echo -e "\nPress (n) to proceed Book Venue or (q) to return to ${BOLD}University Venue Management Menu:"  # Prompting the user for input
   read option  # Reading user's choice
 
-  if [ $option == "n" ]; then  # If the user chooses to proceed with booking (input is 'n')
+  if [[ $option == "n" ]]; then  # If the user chooses to proceed with booking (input is 'n')
     clear 
     BookVenueScreen  # Call the function BookVenueScreen() to proceed with booking a venue
 
-  elif [ $option == "q" ]; then  # If the user chooses to return to the main menu (input is 'q')
+  elif [[ $option == "q" ]]; then  # If the user chooses to return to the main menu (input is 'q')
     clear 
     Main  # Call the main menu function 'Main' to return to the main menu
 
@@ -446,7 +446,7 @@ function PatronDetailValidation()
       # Loop through each line of the file to find the patron with the given ID
       while IFS='' read -r line; do
         patronID="$(echo $line | cut -d ":" -f 1)"  # Extract the patron ID from the line
-        if [ $patronID == $id ]; then  # If the patron ID matches the entered ID
+        if [[ $patronID == $id ]]; then  # If the patron ID matches the entered ID
             valid=true  # Set 'valid' flag to true, indicating the patron ID is valid
             patronName="$(echo $line | cut -d ":" -f 2)"  # Extract the patron name from the line
             phoneNumber=$(echo $line | cut -d ":" -f 3)  # Extract the phone number from the line
@@ -454,7 +454,7 @@ function PatronDetailValidation()
         fi
       done < "$filename"
 
-      if [ $valid == true ]; then  # If the patron ID is valid
+      if [[ $valid == true ]]; then  # If the patron ID is valid
         echo -e "\nPatron Name (auto display): $patronName"  # Display the patron's name
         echo -e "\nPhone Number (auto display): $phoneNumber"  # Display the patron's phone number
         echo -e "\nEmail (auto display): $email"  # Display the patron's email
