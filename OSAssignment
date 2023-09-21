@@ -90,11 +90,11 @@ function Registration()
                   echo "Please enter valid phone number including '-', e.g., 012-3456789"
                 else
                   # Loop until valid Email Address is entered 
-                  while [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9.%+-]+@student.tarc.edu.my$ ]]; do
+                  while [[ ${#email} -lt 8 || ! $email =~ ^[a-z]+-[a-z]{2}[0-9]{2}@student.tarc.edu.my$ ]]; do
                       read -p "Email Address (As per TAR UMT format):" email
 
                       # Check if Email Address is valid 
-                      if [[ ${#email} -lt 8 || ! "$email" =~ ^[A-Za-z0-9.%+-]+@student.tarc.edu.my$ ]]; then
+                      if [[ ${#email} -lt 8 || ! $email =~ ^[a-z]+-[a-z]{2}[0-9]{2}@student.tarc.edu.my$ ]]; then
                         echo "Please enter valid email address."
                       else
                         # Save the Patron details to "Patron.txt" file
@@ -235,9 +235,9 @@ function AddNewVenue()
       echo "Please enter a valid block"
     else
       # Get user input for Room Number and validate it
-      while [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[0-9]+$ ]]; do
+      while [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[a-zA-Z0-9]+$ ]]; do
         read -p "Room Number: " roomNumber
-        if [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[0-9]+$ ]]; then
+        if [[ -z "$roomNumber" || ! "$roomNumber" =~ ^[a-zA-Z0-9]+$ ]]; then
           echo "Please enter a valid room number"
         else
           # Get user input for Room Type and validate it
@@ -261,7 +261,6 @@ function AddNewVenue()
                       status="Available"
 
                       filename="venue.txt"
-                      roomNumber=$blockName+$roomNumber
                       echo "$blockName:$roomNumber:$roomType:$capacity:$remarks:$status" >> $filename
 
                       echo -e "\n\nNew venue added"
@@ -782,6 +781,34 @@ function DisplayReceipt(){
   current_time=$(date +"%H:%M:%S%p")
   current_date=$(date +"%m-%d-%Y")
   echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
+
+  GenerateReceipt "$id" "$patronName" "$roomNum" "$bookingDate" "$timeFrom" "$timeTo" "$reasonBooking"
+}
+
+function GenerateReceipt() {
+    local patron_id="$1"
+    local patron_name="$2"
+    local room_number="$3"
+    local booking_date="$4"
+    local time_from="$5"
+    local time_to="$6"
+    local reasons="$7"
+
+    # Define the receipt filename based on patron_id, room_number, and booking_date
+    local receipt_filename="${patron_id}_${room_number}_${booking_date//\//-}.txt"
+
+    echo -e "\t\t\t${bold}Venue Booking Receipt"
+ng
+    echo -e "\n Patron ID:"$id"\t\t\t         Patron Name: "$patronName > "$receipt_filename"
+    echo -e "\n Room Number:"$roomNum >> "$receipt_filename"
+    echo -e "\n Date Booking:"$bookingDate >> "$receipt_filename"
+    echo -e "\n Time From:"$timeFrom"\t\t\t\t Time To: "$timeTo >> "$receipt_filename"
+    echo -e "\n Reason for Booking:"$reasonBooking >> "$receipt_filename"
+
+
+    echo -e "\n\n\t    This is a computer-generated receipt with no signature required." >> "$receipt_filename"
+    echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"." >> "$receipt_filename"
+    echo "Booking Successful! Receipt saved as $receipt_filename"
 }
 
 

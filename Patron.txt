@@ -1,5 +1,10 @@
 230999:Kang KingKong:012-5555555:kangkk-wp23@student.tarc.edu.my
-123456:Chin Chai Lim:016-1234567:clchin@tarc.edu.my
+123456:Chin Chai Lim:016-1234567:kangkk-wp21@student.tarc.edu.my
 230812:Tan Mei Lee:012-9999999:tanml-wp23@student.tarc.edu.my
 2106821:Chong Xinnan:012-3456789:chongxn-pp20@student.tarc.edu.my
-2106821:Yeoh Teng Li:012-34567890:ytlgg@gmail.com
+2106821:Yeoh Teng Li:012-34567890:chongxn-pp20@student.tarc.edu.my
+2106821:Lim A bENG:012-3456789:tik-wm21@student.tarc.edu.my
+2153648:Yong Li:012-3456789:tik-wm21@student.tarc.edu.my
+2106821:Teng Li Suck:012-3456789:suck-wm21@student.tarc.edu.my
+2106821:Yaw Ping Ping:012-3456789:chongxn-wm21@student.tarc.edu.my
+2106821:Yaw Ping Pung:012-3456789:tanyh-wm21@student.tarc.edu.my
