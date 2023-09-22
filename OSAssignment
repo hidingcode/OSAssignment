@@ -60,18 +60,25 @@ function Main()
 
 # Function for patron registration
 function Registration()
-{ 
+{
+  valid=true
+
   # Display the Patron Registration header
   echo -e "\t\t\t${BOLD}Patron Registration"
   echo -e "\t\t\t========================"
 
   # Loop until valid Patron ID is entered 
-  while [[ ${#id} -lt 7 || ! "$id" =~ ^[0-9]+$ ]]; do
+  while [[ ${#id} -lt 7 || ! "$id" =~ ^[0-9]+$ || $valid == false ]]; do
     read -p "Patron ID (As per TARUMT format):" id 
 
     # Check if Patron ID is valid 
     if [[ ${#id} -lt 7 || ! "$id" =~ ^[0-9]+$ ]]; then
       echo "Please enter at least 7 numeric characters."
+    
+    elif grep -q "^$id:" Patron.txt; then
+      valid=false;
+      echo "Patron ID already exists, please enter a different Patron ID"
+
     else
       # Loop until valid Patron Full Name is entered (only letters and spaces allowed)
       while [[ -z "$name" || "$name" =~ [^a-zA-Z[:space:]] ]]; do
