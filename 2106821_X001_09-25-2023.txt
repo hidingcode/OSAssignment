@@ -1,0 +1,16 @@
+
+ Patron ID:2106821			         Patron Name: Lim A bENG
+
+ Room Number:X001
+
+ Date Booking:09/25/2023
+
+ Time From:11:00				 Time To: 12:00
+
+ Reason for Booking:FYP
+
+
+	    This is a computer-generated receipt with no signature required.
+
+
+			Printed on 09-23-2023 03:54:41AM.

@@ -1,13 +1,6 @@
 PatronID:PatronName:RoomNumber:DateBooking:TimeFrom:TimeTo:ReasonsForBooking
-123:Chin Chai Lim:B001:02/28/2000:08:00:08:30:FYP
-123:ykp:SG001:01/01/2000:13:00:13:30:FYP
-123456:Chin Chai Lim:B002:09/11/2023:10:00:11:00:FYP presentation
-booking added
-123456:Chin Chai Lim:B002:09/11/2023:10:00:10:30:FYP meeting
-booking added
-2106821:Yaw Ping Pung:X001:02/12/2023:11:30:4:30:cHOGN Xin NANA
-booking added
-2106821:Yaw Ping Pung:X001:02/02/2023:12:00:14:00:Fk
-booking added
-2106821:Yaw Ping Pung:X001:02/23/2023:12:00:14:00:A
-booking added
+1234561:Chin Ling Ling:B001:02/28/2000:08:00:08:30:FYP
+1234567:Yaw Kok Ping:SG001:01/01/2000:13:00:13:30:FYP
+2106821:Lim A bENG:X001:09/25/2023:11:00:12:00:FYP
+2308121:Tan Mei Lee:B001A:02/28/2023:14:00:16:00:For FYP Presentation
+

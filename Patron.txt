@@ -1,23 +1,9 @@
-230999:Kang KingKong:012-5555555:kangkk-wp23@student.tarc.edu.my
-123456:Chin Chai Lim:016-1234567:kangkk-wp21@student.tarc.edu.my
-230812:Tan Mei Lee:012-9999999:tanml-wp23@student.tarc.edu.my
+2309991:Kang KingKong:012-5555555:kangkk-wp23@student.tarc.edu.my
+1234561:Chin Ling Ling:016-1234567:chingll-wp21@student.tarc.edu.my
+2308121:Tan Mei Lee:012-9999999:tanml-wp23@student.tarc.edu.my
 2106821:Chong Xinnan:012-3456789:chongxn-pp20@student.tarc.edu.my
 2178821:Yeoh Teng Li:012-34567890:chongxn-pp20@student.tarc.edu.my
 2106821:Lim A bENG:012-3456789:tik-wm21@student.tarc.edu.my
-2153648:Yong Li:012-3456789:tik-wm21@student.tarc.edu.my
-2106863:Teng Li Suck:012-3456789:suck-wm21@student.tarc.edu.my
+2153648:Yong Li:012-3456789:yongli-wm21@student.tarc.edu.my
 
-2154687:Yong Wei Yuan:012-3456789:suck-wm21@student.tarc.edu.my
-2456835:Yong Wei Yuan:012-3456789:suck-wm21@student.tarc.edu.my
-2154683:Yeoh Teng Li:012-3456789:suck-wm21@student.tarc.edu.my
-2456352:A leluya:012-3456789:suck-wm21@student.tarc.edu.my
-2106545:Yaw Kok Ping:012-3456789:suck-wm21@student.tarc.edu.my
-2454642:Yaw Kok Ping:012-3456789:suck-wm21@student.tarc.edu.my
-5463251:YQ:012-3455789:suck-wm21@student.tarc.edu.my
-5423015:Yaw:012-3456789:suck-wm21@student.tarc.edu.my
-2546352:L:012-3456789:suck-wm21@student.tarc.edu.my
-4563254:L:012-3456789:suck-wm21@student.tarc.edu.my
-2154563:L:012-3456788:suck-wm21@student.tarc.edu.my
-2105326:L:012-3456789:kangkk-wp21@student.tarc.edu.my
-2154602:L:012-3456789:suck-wm21@student.tarc.edu.my
-5646432:L:012-3456789:yongwy-wm21@student.tarc.edu.my
+
