@@ -62,7 +62,6 @@ function Main()
 function Registration()
 {
   valid=true
-
   # Display the Patron Registration header
   echo -e "\t\t\t${BOLD}Patron Registration"
   echo -e "\t\t\t========================"
@@ -96,13 +95,19 @@ function Registration()
                 if [[ ${#cNumber} -lt 11 || ! "$cNumber" =~ ^[0-9-]+$ ]]; then
                   echo "Please enter valid phone number including '-', e.g., 012-3456789"
                 else
+                  valid=true;
                   # Loop until valid Email Address is entered 
-                  while [[ ${#email} -lt 8 || ! $email =~ ^[a-z]+-[a-z]{2}[0-9]{2}@student.tarc.edu.my$ ]]; do
+                  while [[ ${#email} -lt 8 || ! $email =~ ^[a-z]+-[a-z]{2}[0-9]{2}@student.tarc.edu.my$ || $valid == false ]]; do
                       read -p "Email Address (As per TAR UMT format):" email
-
+                      q
                       # Check if Email Address is valid 
                       if [[ ${#email} -lt 8 || ! $email =~ ^[a-z]+-[a-z]{2}[0-9]{2}@student.tarc.edu.my$ ]]; then
                         echo "Please enter valid email address."
+                      
+                      elif grep -q "$email" Patron.txt; then
+                        valid=false;
+                        echo "Email address already exists, please enter a different email address"
+                      
                       else
                         # Save the Patron details to "Patron.txt" file
                         filename="Patron.txt"
@@ -491,7 +496,7 @@ function BookVenueScreen()
 
     echo -e "\t\t\tBooking Venue"
     echo -e "\t\t\t============="
-
+    
     ##############################
     echo -e "\nPlease enter the patron capacity: "
     while [[ -z "$patronCapacity" || ! "$patronCapacity" =~ ^[0-9]+$ || "$patronCapacity" -le 0 ]]; do
@@ -681,6 +686,10 @@ function BookingForDateTime(){
                             else
                               durationValid=true
                             fi
+                          # Check is the valid duration
+                          elif [[ $((Totime_hour - Fromtime_hour)) < 0 ]]; then
+                            echo "Booking duration is not valid"
+                            durationValid=false
                           else
                             durationValid=true
                           fi
@@ -790,6 +799,9 @@ function DisplayReceipt(){
   echo -e "\n\n\t\t\t${bold}Printed on "$current_date" "$current_time"."
 
   GenerateReceipt "$id" "$patronName" "$roomNum" "$bookingDate" "$timeFrom" "$timeTo" "$reasonBooking"
+
+  echo -e ""
+  Main
 }
 
 function GenerateReceipt() {
